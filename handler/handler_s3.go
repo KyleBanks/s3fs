@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/KyleBanks/gos3/handler/context"
+	"github.com/KyleBanks/s3fs/handler/context"
 )
 
 // S3Handler defines a struct that handles commands and dispatches them through the Amazon S3 API.

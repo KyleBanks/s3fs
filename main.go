@@ -4,10 +4,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/KyleBanks/gos3/client"
-	"github.com/KyleBanks/gos3/handler"
-	"github.com/KyleBanks/gos3/indicator"
-	"github.com/KyleBanks/gos3/listener"
+	"github.com/KyleBanks/s3fs/client"
+	"github.com/KyleBanks/s3fs/handler"
+	"github.com/KyleBanks/s3fs/indicator"
+	"github.com/KyleBanks/s3fs/listener"
 )
 
 func main() {
