@@ -2,17 +2,19 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/KyleBanks/s3fs/client"
 	"github.com/KyleBanks/s3fs/handler"
 	"github.com/KyleBanks/s3fs/indicator"
 	"github.com/KyleBanks/s3fs/listener"
+	"github.com/KyleBanks/s3fs/output"
 )
 
 func main() {
+	// Determine the output method to use.
+	var out output.Stdout
+
 	// Determine the UI indicator to use.
-	ui := indicator.NewCommandLine()
+	ui := indicator.NewCommandLine(out)
 
 	// Determine the required handler and listener types.
 	// Note: In the future there may be more than one kind to choose from, especially likely for the listener (ie. http listener?).
@@ -25,8 +27,8 @@ func main() {
 	// Infinitely listen for and handle input from the user.
 	for {
 		if cmd, ok := l.Listen(); ok {
-			if err := h.Handle(cmd); err != nil {
-				fmt.Println(err)
+			if err := h.Handle(cmd, out); err != nil {
+				out.Write(err.Error())
 			}
 		}
 	}

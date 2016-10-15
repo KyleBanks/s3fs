@@ -14,7 +14,7 @@ type LsCommand struct {
 }
 
 // Execute performs a 'ls' command by printing the buckets/objects in the pwd based on the underlying context.
-func (ls LsCommand) Execute() error {
+func (ls LsCommand) Execute(out Outputter) error {
 	var res []string
 	var err error
 	var prefix string
@@ -36,7 +36,7 @@ func (ls LsCommand) Execute() error {
 
 	// Add a blank line prior to printing to ensure we don't mix up the first object/bucket name with
 	// previous output (ie. the loading indicator).
-	fmt.Println("")
+	out.Write("\n")
 
 	// Print the 'ls' results, grouping folders together.
 	cache := make(map[string]bool)
@@ -53,7 +53,7 @@ func (ls LsCommand) Execute() error {
 
 		// Check if we've already printed this key.
 		if _, ok := cache[f]; !ok {
-			fmt.Println(f)
+			out.Write(f + "\n")
 			cache[f] = true
 		}
 	}

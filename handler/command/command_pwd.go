@@ -1,8 +1,6 @@
 package command
 
 import (
-	"fmt"
-
 	"github.com/KyleBanks/s3fs/handler/command/context"
 )
 
@@ -12,9 +10,9 @@ type PwdCommand struct {
 }
 
 // Execute performs a 'pwd' command by printing the current working path.
-func (pwd PwdCommand) Execute() error {
+func (pwd PwdCommand) Execute(out Outputter) error {
 	// Print the path followed by a PathDelimiter and newline.
-	fmt.Printf("%v%v\n", pwd.con.Path(), context.PathDelimiter)
+	out.Write(pwd.con.Path() + context.PathDelimiter + "\n")
 
 	return nil
 }

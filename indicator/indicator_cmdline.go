@@ -1,7 +1,6 @@
 package indicator
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -10,6 +9,13 @@ import (
 type CommandLineIndicator struct {
 	mu      sync.Mutex
 	loading bool
+
+	out stringWriter
+}
+
+// stringWriter defines an interface that can recieve strings.
+type stringWriter interface {
+	Write(string)
 }
 
 // ShowLoader displays a command line loading indicator.
@@ -27,8 +33,8 @@ func (c *CommandLineIndicator) HideLoader() {
 }
 
 // ShowPrompt displays a command line prompt for input.
-func (*CommandLineIndicator) ShowPrompt() {
-	fmt.Printf("> ")
+func (c *CommandLineIndicator) ShowPrompt() {
+	c.out.Write("> ")
 }
 
 // init initializes the CommandLineIndicator.
@@ -45,7 +51,7 @@ func (c *CommandLineIndicator) init() {
 
 			// Update the loader if applicable.
 			if loading {
-				fmt.Print(".")
+				c.out.Write(".")
 				time.Sleep(time.Millisecond * 200)
 			}
 		}
@@ -53,8 +59,10 @@ func (c *CommandLineIndicator) init() {
 }
 
 // NewCommandLine initializes and returns a new CommandLineIndicator.
-func NewCommandLine() *CommandLineIndicator {
-	var c CommandLineIndicator
+func NewCommandLine(out stringWriter) *CommandLineIndicator {
+	c := CommandLineIndicator{
+		out: out,
+	}
 	c.init()
 
 	return &c

@@ -9,7 +9,7 @@ type ExitCommand struct {
 }
 
 // Execute performs an 'exit' command by quitting the program.
-func (exit ExitCommand) Execute() error {
+func (exit ExitCommand) Execute(out Outputter) error {
 	os.Exit(0)
 
 	return nil

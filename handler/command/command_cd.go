@@ -12,7 +12,13 @@ type CdCommand struct {
 }
 
 // Execute performs a 'cd' command by updating the underlying context path.
-func (cd CdCommand) Execute() error {
+func (cd CdCommand) Execute(out Outputter) error {
+	// Sanity, do nothing for cd without args.
+	if len(cd.args) == 0 {
+		return nil
+	}
+
+	// Update the context path.
 	cd.con.UpdatePath(cd.args[0])
 
 	return nil

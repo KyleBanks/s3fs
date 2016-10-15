@@ -28,7 +28,7 @@ type indicator interface {
 }
 
 // Handle takes a cmd as input and performs the required processing.
-func (s S3Handler) Handle(cmd []string) error {
+func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 	if len(cmd) == 0 {
 		return nil
 	}
@@ -62,7 +62,7 @@ func (s S3Handler) Handle(cmd []string) error {
 	}
 
 	// Execute the command.
-	err := c.Execute()
+	err := c.Execute(out)
 
 	// Notify the UI channel that we're done.
 	if c.IsLongRunning() {

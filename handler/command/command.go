@@ -21,10 +21,15 @@ const (
 // Command defines an interface for executable instructions.
 type Command interface {
 	// Execute runs the command.
-	Execute() error
+	Execute(Outputter) error
 
 	// IsLongRunning indicates if the command may require a waiting period (ie. remote commands).
 	IsLongRunning() bool
+}
+
+// Outputter defines a type that can receive command output in the form of strings.
+type Outputter interface {
+	Write(string)
 }
 
 // s3client defines an interface that communicates with Amazon S3.
