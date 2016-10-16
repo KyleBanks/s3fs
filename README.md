@@ -6,13 +6,7 @@
 
 ![s3fs Demo](https://kylewbanks.com/images/post/s3fs-demo-github.gif)
 
-# Contributing
-
-There are a number of commands left to implement, and contributions are more than welcome! Specifically, commands to upload and download files, folders, and buckets are sorely missing.
-
-Check the [issues page](https://github.com/KyleBanks/s3fs/issues) if you're interested in contributing or if you feel a feature is missing!
-
-## Installation
+# Installation
 
 ### Binary 
 
@@ -27,7 +21,7 @@ go get -u github.com/KyleBanks/s3fs
 go install github.com/KyleBanks/s3fs
 ```
 
-## Usage 
+# Usage 
 
 Execute the `s3fs` command to launch the application, and then use the appropriate commands outlined below to navigate Amazon S3 as if it were a local filesystem.
 
@@ -96,6 +90,11 @@ $ ls
 - `clear` clears all terminal output.
 - `exit` quits `s3fs`.
 
+# Contributing
+
+There are a number of commands left to implement, and contributions are more than welcome! Specifically, commands to upload and download files, folders, and buckets are sorely missing.
+
+Check the [issues page](https://github.com/KyleBanks/s3fs/issues) if you're interested in contributing or if you feel a feature is missing!
 
 # License
 
