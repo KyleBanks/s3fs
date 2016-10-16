@@ -12,10 +12,10 @@ const (
 	bucketPrefix = "[B]"
 
 	// folderPrefix is the prefix used when outputting folder names.
-	folderPrefix = "[F]"
+	folderPrefix = ""
 
 	// filePrefix is the prefix used when outputting file names.
-	filePrefix = "   "
+	filePrefix = ""
 )
 
 // LsCommand simulates 'ls' functionality.
@@ -37,7 +37,9 @@ func (ls LsCommand) Execute(out Outputter) error {
 		res, err = ls.s3.LsBuckets()
 	} else {
 		// If we have a prefix, store it and provide it to the LsObject command.
-		prefix = ls.con.PathWithoutBucket()
+		if len(ls.con.PathWithoutBucket()) > 0 {
+			prefix = ls.con.PathWithoutBucket() + context.PathDelimiter
+		}
 
 		res, err = ls.s3.LsObjects(ls.con.Bucket(), prefix)
 	}
@@ -47,26 +49,28 @@ func (ls LsCommand) Execute(out Outputter) error {
 		return err
 	}
 
-	// Add a blank line prior to printing to ensure we don't mix up the first object/bucket name with
-	// previous output (ie. the loading indicator).
-	out.Write("\n")
-
 	// Print the 'ls' results, grouping folders together.
 	cache := make(map[string]bool)
 	for _, f := range res {
 		// Remove the prefix if applicable.
-		if len(prefix) > 0 && strings.Contains(f, prefix) {
+		if len(prefix) > len(context.PathDelimiter) && strings.Contains(f, prefix) {
 			f = strings.Replace(f, prefix, "", 1)
 		}
 
-		// Only display the folder name if present.
+		// Skip the folder itself as it will only be shown as "/" once the prefix is stripped above.
+		if len(f) == 0 || f == context.PathDelimiter {
+			continue
+		}
+
+		// Only display the folder name, if this is an object within a folder.
+		// For example, 'folder/file.txt' becomes 'folder/'.
 		if strings.Contains(f, context.PathDelimiter) {
 			f = fmt.Sprintf("%v%v", strings.Split(f, context.PathDelimiter)[0], context.PathDelimiter)
 		}
 
 		// Check if we've already printed this key.
 		if _, ok := cache[f]; !ok {
-			out.Write(prefixOutput(f, isBucketList) + "\n")
+			out.Write("\n" + prefixOutput(f, isBucketList))
 			cache[f] = true
 		}
 	}

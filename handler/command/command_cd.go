@@ -43,14 +43,22 @@ func (cd CdCommand) Execute(out Outputter) error {
 
 	// Targeting a specific directory.
 	default:
-		ok, err = cd.s3.ObjectExists(targetPath[0], strings.Join(targetPath[1:], context.PathDelimiter)+context.PathDelimiter)
+		// Construct the target object key to check for.
+		key := strings.Join(targetPath[1:], context.PathDelimiter)
+
+		// Ensure the parget always ends in a path delimiter or the S3 API will say it doesn't exist.
+		if string(key[len(key)-1]) != context.PathDelimiter {
+			key = key + context.PathDelimiter
+		}
+
+		ok, err = cd.s3.ObjectExists(targetPath[0], key)
 	}
 
 	// Ensure we can perform the command.
 	if err != nil {
 		return err
 	} else if !ok {
-		return errors.New("Cannot change into non-existent directory: " + target)
+		return errors.New("Cannot change into non-existent directory: " + strings.Join(targetPath, context.PathDelimiter) + context.PathDelimiter)
 	}
 
 	// Valid target, update the context path.
