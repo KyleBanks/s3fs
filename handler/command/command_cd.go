@@ -67,8 +67,22 @@ func (cd CdCommand) Execute(out Outputter) error {
 	return nil
 }
 
-// IsLongRunning returns true because 'cd' must validate with S3 that the target exists.
-func (CdCommand) IsLongRunning() bool {
+// IsLongRunning returns true when an S3 API call is required prior to changing directory.
+func (cd CdCommand) IsLongRunning() bool {
+	// Empty, no need to do anything.
+	if len(cd.args) == 0 {
+		return false
+	}
+
+	// Calculate the target.
+	target := cd.args[0]
+	targetPath := cd.con.CalculatePath(target)
+
+	// If the target length is zero, we're simply going to root.
+	if len(targetPath) == 0 {
+		return false
+	}
+
 	return true
 }
 
