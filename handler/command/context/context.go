@@ -2,7 +2,6 @@
 package context
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -88,7 +87,7 @@ func (c *Context) PathWithoutBucket() string {
 	}
 
 	// Return the path, without bucket, as a joined string delimited by PathDelimiter.
-	return fmt.Sprintf("%v%v", strings.Join(c.path[1:], PathDelimiter), PathDelimiter)
+	return strings.Join(c.path[1:], PathDelimiter)
 }
 
 // Bucket returns the bucket name as a string.
