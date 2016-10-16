@@ -18,13 +18,30 @@ type Context struct {
 
 // UpdatePath modifies the context's path based on the string provided.
 //
+// UpdatePath differs from CalculatePath in that the underlying path of the context is updated.
+func (c *Context) UpdatePath(p string) {
+	c.path = c.CalculatePath(p)
+}
+
+// CalculatePath determines the context's path based on the string provided.
+//
 // For instance, provding "directory/another" will append "directory" and "another" to the path.
 // Providing "../directory" will move up a level in the path and then append "directory".
-func (c *Context) UpdatePath(p string) {
-	// If the path is equal to a single path delimiter (ie. 'cd /') just reset the context path.
-	if p == PathDelimiter {
-		c.path = make([]string, 0)
-		return
+//
+// CalculatePath differs from UpdatePath in that the underlying path of the context is not actually updated,
+// the result is simply returned.
+func (c *Context) CalculatePath(p string) []string {
+	// Get a reference to the current path.
+	path := c.path
+
+	// Sanity.
+	if len(p) == 0 {
+		return path
+	}
+
+	// If the path is equal to, or starts with, a single path delimiter (ie. 'cd /') then reset the context path.
+	if p == PathDelimiter || p[:1] == PathDelimiter {
+		path = make([]string, 0)
 	}
 
 	// Split path elements by the path delimiter.
@@ -34,10 +51,10 @@ func (c *Context) UpdatePath(p string) {
 	for _, t := range elems {
 		switch t {
 
-		// Remove last element.
+		// Remove up a level by removing the last element of the path.
 		case "..":
 			if !c.IsRoot() {
-				c.path = c.path[:len(c.path)-1]
+				path = path[:len(path)-1]
 			}
 
 		// Ignore.
@@ -46,9 +63,11 @@ func (c *Context) UpdatePath(p string) {
 
 		// Append to the path.
 		default:
-			c.path = append(c.path, t)
+			path = append(path, t)
 		}
 	}
+
+	return path
 }
 
 // IsRoot indicates if the context is at the root

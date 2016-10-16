@@ -52,6 +52,39 @@ func (c Client) LsObjects(bucket, prefix string) ([]string, error) {
 	return objects, nil
 }
 
+// BucketExists returns a bool indicating if the specified bucket exists.
+func (c Client) BucketExists(bucket string) (bool, error) {
+	// Perform a HEAD request to determine if the bucket exists.
+	input := s3.HeadBucketInput{
+		Bucket: &bucket,
+	}
+
+	// Assume an error means that the bucket doesn't exist.
+	// TODO: Not a great assumption, check the actual error.
+	if _, err := c.s3.HeadBucket(&input); err != nil {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+// ObjectExists returns a bool indicating if the specified object exists in a given bucket.
+func (c Client) ObjectExists(bucket, key string) (bool, error) {
+	// Perform a HEAD request to determine if the object exists.
+	input := s3.HeadObjectInput{
+		Bucket: &bucket,
+		Key:    &key,
+	}
+
+	// Assume an error means that the object doesn't exist.
+	// TODO: Not a great assumption, check the actual error.
+	if _, err := c.s3.HeadObject(&input); err != nil {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 // New returns an initialized Client.
 func New(region string) Client {
 	return Client{

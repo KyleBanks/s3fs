@@ -18,8 +18,8 @@ const (
 	CmdExit = "exit"
 )
 
-// Command defines an interface for executable instructions.
-type Command interface {
+// Executer defines an interface for executable instructions.
+type Executer interface {
 	// Execute runs the command.
 	Execute(Outputter) error
 
@@ -32,8 +32,11 @@ type Outputter interface {
 	Write(string)
 }
 
-// s3client defines an interface that communicates with Amazon S3.
-type s3client interface {
+// S3Client defines an interface that communicates with Amazon S3.
+type S3Client interface {
 	LsBuckets() ([]string, error)
 	LsObjects(bucket, prefix string) ([]string, error)
+
+	BucketExists(string) (bool, error)
+	ObjectExists(string, string) (bool, error)
 }

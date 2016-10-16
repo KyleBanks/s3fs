@@ -9,16 +9,10 @@ import (
 
 // S3Handler defines a struct that handles commands and dispatches them through the Amazon S3 API.
 type S3Handler struct {
-	s3 s3client
+	s3 command.S3Client
 	ui indicator
 
 	con *context.Context
-}
-
-// s3client defines an interface that communicates with Amazon S3.
-type s3client interface {
-	LsBuckets() ([]string, error)
-	LsObjects(bucket, prefix string) ([]string, error)
 }
 
 // indicator defines a UI interface to display status updates to the user.
@@ -34,38 +28,38 @@ func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 	}
 
 	// Determine the action to take based on the cmd.
-	var c command.Command
+	var e command.Executer
 
 	switch cmd[0] {
 
 	// API operations:
 	case command.CmdLs:
-		c = command.NewLs(s.s3, s.con)
+		e = command.NewLs(s.s3, s.con)
 
 	// Context operations:
 	case command.CmdCd:
-		c = command.NewCd(s.con, cmd[1:])
+		e = command.NewCd(s.s3, s.con, cmd[1:])
 	case command.CmdPwd:
-		c = command.NewPwd(s.con)
+		e = command.NewPwd(s.con)
 	case command.CmdClear:
-		c = command.NewClear()
+		e = command.NewClear()
 	case command.CmdExit:
-		c = command.NewExit()
+		e = command.NewExit()
 
 	default:
 		return errors.New("Unknown Command: " + cmd[0])
 	}
 
 	// Show the loading indicator if applicable.
-	if c.IsLongRunning() {
+	if e.IsLongRunning() {
 		s.ui.ShowLoader()
 	}
 
 	// Execute the command.
-	err := c.Execute(out)
+	err := e.Execute(out)
 
 	// Notify the UI channel that we're done.
-	if c.IsLongRunning() {
+	if e.IsLongRunning() {
 		s.ui.HideLoader()
 	}
 
@@ -73,7 +67,7 @@ func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 }
 
 // NewS3 initializes and returns an S3Handler.
-func NewS3(s s3client, ui indicator) S3Handler {
+func NewS3(s command.S3Client, ui indicator) S3Handler {
 	return S3Handler{
 		s3:  s,
 		ui:  ui,

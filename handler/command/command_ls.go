@@ -9,7 +9,7 @@ import (
 
 // LsCommand simulates 'ls' functionality.
 type LsCommand struct {
-	s3  s3client
+	s3  S3Client
 	con *context.Context
 }
 
@@ -67,7 +67,7 @@ func (LsCommand) IsLongRunning() bool {
 }
 
 // NewLs initializes and returns an LsCommand.
-func NewLs(s3 s3client, con *context.Context) LsCommand {
+func NewLs(s3 S3Client, con *context.Context) LsCommand {
 	return LsCommand{
 		s3:  s3,
 		con: con,

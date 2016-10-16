@@ -30,6 +30,9 @@ func (c *CommandLineIndicator) HideLoader() {
 	c.mu.Lock()
 	c.loading = false
 	c.mu.Unlock()
+
+	// Always write a blank line after loading finishes.
+	c.out.Write("\n")
 }
 
 // ShowPrompt displays a command line prompt for input.

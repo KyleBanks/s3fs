@@ -28,7 +28,7 @@ func main() {
 	for {
 		if cmd, ok := l.Listen(); ok {
 			if err := h.Handle(cmd, out); err != nil {
-				out.Write(err.Error())
+				out.Write(err.Error() + "\n")
 			}
 		}
 	}
