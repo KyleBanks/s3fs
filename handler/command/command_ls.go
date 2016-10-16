@@ -7,6 +7,17 @@ import (
 	"github.com/KyleBanks/s3fs/handler/command/context"
 )
 
+const (
+	// bucketPrefix is the prefix used when outputting bucket names.
+	bucketPrefix = "[B]"
+
+	// folderPrefix is the prefix used when outputting folder names.
+	folderPrefix = "[F]"
+
+	// filePrefix is the prefix used when outputting file names.
+	filePrefix = "   "
+)
+
 // LsCommand simulates 'ls' functionality.
 type LsCommand struct {
 	s3  S3Client
@@ -18,9 +29,11 @@ func (ls LsCommand) Execute(out Outputter) error {
 	var res []string
 	var err error
 	var prefix string
+	var isBucketList bool
 
 	// Determine which type of 'ls' to perform based on the context.
 	if ls.con.IsRoot() {
+		isBucketList = true
 		res, err = ls.s3.LsBuckets()
 	} else {
 		// If we have a prefix, store it and provide it to the LsObject command.
@@ -53,12 +66,27 @@ func (ls LsCommand) Execute(out Outputter) error {
 
 		// Check if we've already printed this key.
 		if _, ok := cache[f]; !ok {
-			out.Write(f + "\n")
+			out.Write(prefixOutput(f, isBucketList) + "\n")
 			cache[f] = true
 		}
 	}
 
 	return nil
+}
+
+// prefixOutput returns a modified version of a bucket/folder/filename by prepending the appropriate prefix.
+func prefixOutput(out string, isBucketList bool) string {
+	var prefix string
+
+	if isBucketList { // Check if it's a bucket...
+		prefix = bucketPrefix
+	} else if string(out[len(out)-1]) == context.PathDelimiter { // ... or folder...
+		prefix = folderPrefix
+	} else { // ... must be a file.
+		prefix = filePrefix
+	}
+
+	return fmt.Sprintf("%v %v", prefix, out)
 }
 
 // IsLongRunning returns true because 'ls' requires a network operation.
