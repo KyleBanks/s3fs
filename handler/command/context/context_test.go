@@ -1,31 +1,40 @@
 package context
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestUpdatePath(t *testing.T) {
+	// Helper function to check the length of a path.
+	validatePathLength := func(p []string, l int) {
+		if len(p) != l {
+			t.Fatalf("Unexpected path length: {Actual: %v, Expected: %v}, %v", len(p), l, p)
+		}
+	}
+
 	var c Context
 
 	// Most simple use case
 	c.UpdatePath("bucket")
-	validatePathLength(t, c.path, 1)
-	if c.path[0] != "bucket" {
+	validatePathLength(c.path, 1)
+	if c.Bucket() != "bucket" {
 		t.Fatalf("Unexpected Path: %v", c.path)
 	}
 
 	// Go back in the path
 	c.UpdatePath("../")
-	validatePathLength(t, c.path, 0)
+	validatePathLength(c.path, 0)
 
 	// Two elements in the path
 	c.UpdatePath("bucket/key")
-	validatePathLength(t, c.path, 2)
-	if c.path[0] != "bucket" || c.path[1] != "key" {
+	validatePathLength(c.path, 2)
+	if c.Bucket() != "bucket" || c.PathWithoutBucket() != "key" {
 		t.Fatalf("Unexpected path: %v", c.path)
 	}
 
 	// Just the path delimiter (ie. 'cd /')
 	c.UpdatePath(PathDelimiter)
-	validatePathLength(t, c.path, 0)
+	validatePathLength(c.path, 0)
 }
 
 func TestCalculatePath(t *testing.T) {
@@ -34,15 +43,8 @@ func TestCalculatePath(t *testing.T) {
 
 	// Most simple use case
 	p = c.CalculatePath("bucket")
-	validatePathLength(t, p, 1)
-	if p[0] != "bucket" {
-		t.Fatalf("Unexpected Path: %v", c.path)
-	}
-}
-
-func validatePathLength(t *testing.T, p []string, l int) {
-	if len(p) != l {
-		t.Fatalf("Unexpected path length: {Actual: %v, Expected: %v}, %v", len(p), l, p)
+	if len(p) != 1 || p[0] != "bucket" {
+		t.Fatalf("Unexpected Path: %v", p)
 	}
 }
 

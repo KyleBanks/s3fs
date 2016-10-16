@@ -5,17 +5,23 @@ import (
 	"time"
 )
 
+const (
+	// loaderSleepTime is the time between loading indicator updates.
+	loaderSleepTime = time.Millisecond * 200
+
+	// loaderText is the text displayed when the loading indicator is enabled.
+	loaderText = "."
+
+	// promptText is the text displayed when ShowPrompt() is called.
+	promptText = "> "
+)
+
 // CommandLineIndicator provides UI indications to the command line.
 type CommandLineIndicator struct {
 	mu      sync.Mutex
 	loading bool
 
 	out stringWriter
-}
-
-// stringWriter defines an interface that can recieve strings.
-type stringWriter interface {
-	Write(string)
 }
 
 // ShowLoader displays a command line loading indicator.
@@ -37,7 +43,7 @@ func (c *CommandLineIndicator) HideLoader() {
 
 // ShowPrompt displays a command line prompt for input.
 func (c *CommandLineIndicator) ShowPrompt() {
-	c.out.Write("> ")
+	c.out.Write(promptText)
 }
 
 // init initializes the CommandLineIndicator.
@@ -54,9 +60,11 @@ func (c *CommandLineIndicator) init() {
 
 			// Update the loader if applicable.
 			if loading {
-				c.out.Write(".")
-				time.Sleep(time.Millisecond * 200)
+				c.out.Write(loaderText)
 			}
+
+			// Sleep a while before checking/displaying the loading indicator again.
+			time.Sleep(loaderSleepTime)
 		}
 	}()
 }
