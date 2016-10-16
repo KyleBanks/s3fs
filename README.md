@@ -4,7 +4,7 @@
 
 `s3fs` is an [Amazon S3](https://aws.amazon.com/s3/) client that provides a familiar interface for navigating and managing S3 buckets and objects. The goal of `s3fs` is to allow you to interact with Amazon S3 as you would your local filesystem.
 
-![s3fs Demo](https://kylewbanks.com/images/post/s3fs-demo-github.gif)
+![s3fs Demo](_demo/demo.gif)
 
 # Installation
 
