@@ -6,6 +6,12 @@
 
 ![s3fs Demo](https://kylewbanks.com/images/post/s3fs-demo-github.gif)
 
+# Contributing
+
+There are a number of commands left to implement, and contributions are more than welcome! Specifically, commands to upload and download files, folders, and buckets are sorely missing.
+
+Check the [issues page](https://github.com/KyleBanks/s3fs/issues) if you're interested in contributing or if you feel a feature is missing!
+
 ## Installation
 
 ### Binary 
@@ -89,6 +95,7 @@ $ ls
 
 - `clear` clears all terminal output.
 - `exit` quits `s3fs`.
+
 
 # License
 
