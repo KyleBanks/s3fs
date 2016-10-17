@@ -17,8 +17,7 @@ Simply go to the [releases page](https://github.com/KyleBanks/s3fs/releases) and
 `s3fs` is written in [Go](https://golang.org/) and can be installed using `go get` if you have a working Go environment. 
 
 ```
-go get -u github.com/KyleBanks/s3fs
-go install github.com/KyleBanks/s3fs
+go get github.com/KyleBanks/s3fs
 ```
 
 # Usage 
