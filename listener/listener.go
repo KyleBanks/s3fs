@@ -5,3 +5,14 @@ package listener
 type Listener interface {
 	Listen() (cmd []string, ok bool)
 }
+
+// indicator defines a UI interface to display status updates to the user.
+type indicator interface {
+	ShowPrompt()
+}
+
+// inputter defines an interface that can scan for and retrieve input.
+type inputter interface {
+	Scan() bool
+	Text() string
+}

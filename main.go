@@ -2,6 +2,9 @@
 package main
 
 import (
+	"bufio"
+	"os"
+
 	"github.com/KyleBanks/s3fs/client"
 	"github.com/KyleBanks/s3fs/handler"
 	"github.com/KyleBanks/s3fs/indicator"
@@ -22,7 +25,7 @@ func main() {
 	var l listener.Listener
 
 	h = handler.NewS3(client.New("us-east-1"), ui)
-	l = listener.NewStdin(ui)
+	l = listener.NewText(ui, bufio.NewScanner(os.Stdin))
 
 	// Infinitely listen for and handle input from the user.
 	for {
