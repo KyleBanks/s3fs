@@ -14,7 +14,7 @@ import (
 
 func main() {
 	// Determine the output method to use.
-	var out output.Stdout
+	out := output.New(os.Stdout)
 
 	// Determine the UI indicator to use.
 	ui := indicator.NewCommandLine(out)
