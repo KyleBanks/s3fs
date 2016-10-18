@@ -14,30 +14,30 @@ const (
 	promptText = "> "
 )
 
-// CommandLineIndicator provides UI indications to the command line.
-type CommandLineIndicator struct {
+// CommandLine provides UI indications to the command line.
+type CommandLine struct {
 	stopLoading chan bool
 
 	out stringWriter
 }
 
 // ShowLoader displays a command line loading indicator.
-func (c *CommandLineIndicator) ShowLoader() {
+func (c *CommandLine) ShowLoader() {
 	go c.startLoading()
 }
 
 // HideLoader hides the command line loading indicator.
-func (c *CommandLineIndicator) HideLoader() {
+func (c *CommandLine) HideLoader() {
 	c.stopLoading <- true
 }
 
 // ShowPrompt displays a command line prompt for input.
-func (c *CommandLineIndicator) ShowPrompt() {
+func (c *CommandLine) ShowPrompt() {
 	c.out.Write(promptText)
 }
 
 // startLoading initializes prints the loading indicator until the stop signal is received.
-func (c *CommandLineIndicator) startLoading() {
+func (c *CommandLine) startLoading() {
 	for {
 		select {
 
@@ -57,9 +57,9 @@ func (c *CommandLineIndicator) startLoading() {
 	}
 }
 
-// NewCommandLine initializes and returns a new CommandLineIndicator.
-func NewCommandLine(out stringWriter) *CommandLineIndicator {
-	return &CommandLineIndicator{
+// NewCommandLine initializes and returns a new CommandLine.
+func NewCommandLine(out stringWriter) *CommandLine {
+	return &CommandLine{
 		out:         out,
 		stopLoading: make(chan bool),
 	}
