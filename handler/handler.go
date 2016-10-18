@@ -9,3 +9,9 @@ import (
 type Handler interface {
 	Handle(cmd []string, out command.Outputter) error
 }
+
+// indicator defines a UI interface to display status updates to the user.
+type indicator interface {
+	ShowLoader()
+	HideLoader()
+}

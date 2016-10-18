@@ -15,12 +15,6 @@ type S3Handler struct {
 	con *context.Context
 }
 
-// indicator defines a UI interface to display status updates to the user.
-type indicator interface {
-	ShowLoader()
-	HideLoader()
-}
-
 // Handle takes a cmd as input and performs the required processing.
 func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 	if len(cmd) == 0 {
@@ -28,26 +22,9 @@ func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 	}
 
 	// Determine the action to take based on the cmd.
-	var e command.Executer
-
-	switch cmd[0] {
-
-	// API operations:
-	case command.CmdLs:
-		e = command.NewLs(s.s3, s.con)
-
-	// Context operations:
-	case command.CmdCd:
-		e = command.NewCd(s.s3, s.con, cmd[1:])
-	case command.CmdPwd:
-		e = command.NewPwd(s.con)
-	case command.CmdClear:
-		e = command.NewClear()
-	case command.CmdExit:
-		e = command.NewExit()
-
-	default:
-		return errors.New("Unknown Command: " + cmd[0])
+	e, err := s.commandFromArgs(cmd)
+	if err != nil {
+		return err
 	}
 
 	// Show the loading indicator if applicable.
@@ -56,7 +33,7 @@ func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 	}
 
 	// Execute the command.
-	err := e.Execute(out)
+	err = e.Execute(out)
 
 	// Notify the UI channel that we're done.
 	if e.IsLongRunning() {
@@ -66,10 +43,32 @@ func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 	return err
 }
 
+// commandFromArgs takes an arg slice and returns the appropriate command executor.
+func (s S3Handler) commandFromArgs(args []string) (e command.Executer, err error) {
+	switch args[0] {
+
+	case command.CmdLs:
+		e = command.NewLs(s.s3, s.con)
+	case command.CmdCd:
+		e = command.NewCd(s.s3, s.con, args[1:])
+	case command.CmdPwd:
+		e = command.NewPwd(s.con)
+	case command.CmdClear:
+		e = command.NewClear()
+	case command.CmdExit:
+		e = command.NewExit()
+
+	default:
+		err = errors.New("Unknown Command: " + args[0])
+	}
+
+	return e, err
+}
+
 // NewS3 initializes and returns an S3Handler.
-func NewS3(s command.S3Client, ui indicator) S3Handler {
+func NewS3(s3 command.S3Client, ui indicator) S3Handler {
 	return S3Handler{
-		s3:  s,
+		s3:  s3,
 		ui:  ui,
 		con: &context.Context{},
 	}

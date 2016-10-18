@@ -35,6 +35,14 @@ func TestUpdatePath(t *testing.T) {
 	// Just the path delimiter (ie. 'cd /')
 	c.UpdatePath(PathDelimiter)
 	validatePathLength(c.path, 0)
+
+	// Empty string should be ignored
+	c.UpdatePath("bucket")
+	c.UpdatePath("")
+	validatePathLength(c.path, 1)
+	if c.Bucket() != "bucket" || len(c.PathWithoutBucket()) > 0 {
+		t.Fatalf("Unexpected path after cd-ing with empty string: %v", c.Path())
+	}
 }
 
 func TestCalculatePath(t *testing.T) {

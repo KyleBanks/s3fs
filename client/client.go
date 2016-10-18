@@ -9,7 +9,7 @@ import (
 
 // Client defines a wrapper for the Amazon S3 API.
 type Client struct {
-	s3 *s3.S3
+	s3 s3Communicator
 }
 
 // LsBuckets performs a request to retrieve all buckets, and returns their names.
@@ -21,9 +21,9 @@ func (c Client) LsBuckets() ([]string, error) {
 	}
 
 	// Create a slice of bucket names to return.
-	buckets := make([]string, 0, len(resp.Buckets))
-	for _, b := range resp.Buckets {
-		buckets = append(buckets, *b.Name)
+	buckets := make([]string, len(resp.Buckets))
+	for i, b := range resp.Buckets {
+		buckets[i] = *b.Name
 	}
 
 	return buckets, nil
@@ -44,9 +44,9 @@ func (c Client) LsObjects(bucket, prefix string) ([]string, error) {
 	}
 
 	// Create a slice of object keys to return.
-	objects := make([]string, 0, len(resp.Contents))
-	for _, o := range resp.Contents {
-		objects = append(objects, *o.Key)
+	objects := make([]string, len(resp.Contents))
+	for i, o := range resp.Contents {
+		objects[i] = *o.Key
 	}
 
 	return objects, nil

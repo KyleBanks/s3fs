@@ -191,7 +191,7 @@ func TestCdCommandIsLongRunning(t *testing.T) {
 		t.Fatal("IsLongRunning should be false when the target is the root")
 	}
 
-	// Anything else should be long running
+	// Anything else should be long running.
 	argSets := [][]string{
 		[]string{"bucket"},
 		[]string{"bucket/directory"},
@@ -199,6 +199,7 @@ func TestCdCommandIsLongRunning(t *testing.T) {
 	}
 	for _, argSet := range argSets {
 		cd = NewCd(&s3, &con, argSet)
+
 		if !cd.IsLongRunning() {
 			t.Fatalf("Expected IsLongRunning to be true for target: %v", argSet)
 		}

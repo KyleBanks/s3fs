@@ -4,6 +4,14 @@ import (
 	"strings"
 )
 
+const (
+	// cmdDelimiter is used to seperate multiple commands in the same input.
+	cmdDelimiter = "&&"
+
+	// argDelimiter is used to seperate arguments for a command.
+	argDelimiter = " "
+)
+
 // TextListener listens for incoming text commands.
 type TextListener struct {
 	input inputter
@@ -12,14 +20,27 @@ type TextListener struct {
 }
 
 // Listen prompts and waits for user input on Stdin.
-func (t TextListener) Listen() (in []string, ok bool) {
+func (t TextListener) Listen() ([]InputCommand, bool) {
 	// Show the UI prompt.
 	t.ui.ShowPrompt()
 
 	// Listen for user input.
 	for t.input.Scan() {
-		// Tokenize and return the command input.
-		return strings.Split(t.input.Text(), " "), true
+		// Split input command(s) by the cmdDelimiter.
+		cmdStrs := strings.Split(t.input.Text(), cmdDelimiter)
+		cmds := make([]InputCommand, len(cmdStrs))
+
+		// For each command, construct the InputCommand.
+		for i, str := range cmdStrs {
+			str = strings.TrimSpace(str)
+
+			// Split the command arguments by the argDelimiter and construct the InputCommand.
+			cmds[i] = InputCommand{
+				Args: strings.Split(str, argDelimiter),
+			}
+		}
+
+		return cmds, true
 	}
 
 	return nil, false

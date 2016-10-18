@@ -70,7 +70,7 @@ func (ls LsCommand) Execute(out Outputter) error {
 
 		// Check if we've already printed this key.
 		if _, ok := cache[f]; !ok {
-			out.Write("\n" + prefixOutput(f, isBucketList))
+			out.Write("\n" + ls.prefixOutput(f, isBucketList))
 			cache[f] = true
 		}
 	}
@@ -79,7 +79,7 @@ func (ls LsCommand) Execute(out Outputter) error {
 }
 
 // prefixOutput returns a modified version of a bucket/folder/filename by prepending the appropriate prefix.
-func prefixOutput(out string, isBucketList bool) string {
+func (LsCommand) prefixOutput(out string, isBucketList bool) string {
 	var prefix string
 
 	if isBucketList { // Check if it's a bucket...

@@ -27,11 +27,18 @@ func main() {
 	h = handler.NewS3(client.New("us-east-1"), ui)
 	l = listener.NewText(ui, bufio.NewScanner(os.Stdin))
 
-	// Infinitely listen for and handle input from the user.
+	// Infinitely listen for and handle user input.
 	for {
-		if cmd, ok := l.Listen(); ok {
-			if err := h.Handle(cmd, out); err != nil {
+		cmds, ok := l.Listen()
+		if !ok {
+			continue
+		}
+
+		// For each command recieved, handle it.
+		for _, cmd := range cmds {
+			if err := h.Handle(cmd.Args, out); err != nil {
 				out.Write(err.Error() + "\n")
+				break
 			}
 		}
 	}
