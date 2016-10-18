@@ -16,7 +16,7 @@ func (m *mockWriter) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
-func TestOutputWriterWrite(t *testing.T) {
+func TestOutputter_Write(t *testing.T) {
 	var w mockWriter
 
 	out := New(&w)

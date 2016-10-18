@@ -7,28 +7,28 @@ import (
 	"github.com/KyleBanks/s3fs/handler/command/context"
 )
 
-func TestCdCommandExecute(t *testing.T) {
-	var s3 mockS3Client
-	var con context.Context
-	var args []string
-	var cd CdCommand
-	var out mockOutputter
+func TestCdCommand_Execute(t *testing.T) {
+	{
+		var s3 mockS3Client
+		var con context.Context
+		var args []string
+		var cd CdCommand
+		var out mockOutputter
 
-	// No args
-	cd = NewCd(&s3, &con, args)
-	if err := cd.Execute(&out); err != nil {
-		t.Fatal(err)
+		// No args
+		cd = NewCd(&s3, &con, args)
+		if err := cd.Execute(&out); err != nil {
+			t.Fatal(err)
+		}
+
+		// Root
+		args = []string{context.PathDelimiter}
+		cd = NewCd(&s3, &con, args)
+		if err := cd.Execute(&out); err != nil {
+			t.Fatal(err)
+		}
 	}
 
-	// Root
-	args = []string{context.PathDelimiter}
-	cd = NewCd(&s3, &con, args)
-	if err := cd.Execute(&out); err != nil {
-		t.Fatal(err)
-	}
-}
-
-func TestCdCommandExecute_Bucket(t *testing.T) {
 	// Valid bucket
 	{
 		var s3 mockS3Client
@@ -98,9 +98,7 @@ func TestCdCommandExecute_Bucket(t *testing.T) {
 
 		s3.bucketExistsCallback = nil
 	}
-}
 
-func TestCdCommandExecute_Folder(t *testing.T) {
 	// Valid folder
 	{
 		var s3 mockS3Client
@@ -172,7 +170,7 @@ func TestCdCommandExecute_Folder(t *testing.T) {
 	}
 }
 
-func TestCdCommandIsLongRunning(t *testing.T) {
+func TestCdCommand_IsLongRunning(t *testing.T) {
 	var s3 mockS3Client
 	var con context.Context
 	var args []string

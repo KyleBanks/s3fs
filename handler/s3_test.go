@@ -8,7 +8,7 @@ import (
 	"github.com/KyleBanks/s3fs/handler/command"
 )
 
-func TestS3HandlerHandle(t *testing.T) {
+func TestS3Handler_Handle(t *testing.T) {
 	// Empty command
 	{
 		var ui mockIndicator
@@ -84,13 +84,13 @@ func TestS3HandlerHandle(t *testing.T) {
 	}
 }
 
-func TestS3HandlerCommandFromArgs(t *testing.T) {
+func TestS3Handler_commandFromArgs(t *testing.T) {
 	// Known Commands
 	{
-		// Defined the command types, and the expected Executer for each.
+		// Define the command types, and the expected Executor for each.
 		cmds := []struct {
 			name     string
-			expected command.Executer
+			expected command.Executor
 		}{
 			{command.CmdLs, command.LsCommand{}},
 			{command.CmdCd, command.CdCommand{}},
@@ -108,9 +108,9 @@ func TestS3HandlerCommandFromArgs(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			// Check the type and ensure equality with what's expected.
+			// Check the returned interface type and ensure equality with what's expected.
 			if reflect.TypeOf(c) != reflect.TypeOf(cmd.expected) {
-				t.Fatalf("Unexpected Executer returned: %v", c)
+				t.Fatalf("Unexpected Executor returned for command[%v]: %v", cmd.name, reflect.TypeOf(c))
 			}
 		}
 	}

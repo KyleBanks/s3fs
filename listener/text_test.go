@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestTextListenerListen(t *testing.T) {
+func TestTextListener_Listen(t *testing.T) {
 	// Positive case, scan successful
 	{
 		var ui mockIndicator

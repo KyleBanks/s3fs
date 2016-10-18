@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func TestClientLsBuckets(t *testing.T) {
+func TestClient_LsBuckets(t *testing.T) {
 	// Positive case
 	{
 		sample := s3.ListBucketsOutput{
@@ -55,7 +55,7 @@ func TestClientLsBuckets(t *testing.T) {
 	}
 }
 
-func TestClientLsObjects(t *testing.T) {
+func TestClient_LsObjects(t *testing.T) {
 	// Positive case
 	{
 		bucket := "bucket"
@@ -114,7 +114,7 @@ func TestClientLsObjects(t *testing.T) {
 	}
 }
 
-func TestClientBucketExists(t *testing.T) {
+func TestClient_BucketExists(t *testing.T) {
 	// Positive case
 	{
 		bucket := "bucket"
@@ -158,7 +158,7 @@ func TestClientBucketExists(t *testing.T) {
 	}
 }
 
-func TestClientObjectExists(t *testing.T) {
+func TestClient_ObjectExists(t *testing.T) {
 	// Positive case
 	{
 		bucket := "bucket"

@@ -1,6 +1,6 @@
 # s3fs
 
-[![Build Status](https://travis-ci.org/KyleBanks/s3fs.svg?branch=master)](https://travis-ci.org/KyleBanks/s3fs)
+[![Build Status](https://travis-ci.org/KyleBanks/s3fs.svg?branch=master)](https://travis-ci.org/KyleBanks/s3fs) &nbsp; [![GoDoc](https://godoc.org/github.com/KyleBanks/s3fs?status.svg)](https://godoc.org/github.com/KyleBanks/s3fs)
 
 `s3fs` is an [Amazon S3](https://aws.amazon.com/s3/) client that provides a familiar interface for navigating and managing S3 buckets and objects. The goal of `s3fs` is to allow you to interact with Amazon S3 as you would your local filesystem.
 
@@ -73,15 +73,15 @@ $ ls
 # Print object list when in a bucket.
 $ cd bucket1
 $ ls
-[F] folder1/
-[F] folder2/
-    file1.txt
+ folder1/
+ folder2/
+ file1.txt
 
 $ cd folder1
 $ ls 
-[F] subfolder/
-    file2.txt
-    file3.txt
+ subfolder/
+ file2.txt
+ file3.txt
 ```
 
 ### Other Commands

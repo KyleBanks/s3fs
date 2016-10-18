@@ -8,7 +8,7 @@ import (
 	"github.com/KyleBanks/s3fs/handler/command/context"
 )
 
-func TestLsCommandExecute(t *testing.T) {
+func TestLsCommand_Execute(t *testing.T) {
 	// Root bucket list
 	{
 		var s3 mockS3Client
@@ -167,7 +167,7 @@ func TestLsCommandExecute(t *testing.T) {
 	}
 }
 
-func TestLsCommandPrefixOutput(t *testing.T) {
+func TestLsCommand_prefixOutput(t *testing.T) {
 	var s3 mockS3Client
 	var con context.Context
 	ls := NewLs(&s3, &con)
@@ -200,7 +200,7 @@ func TestLsCommandPrefixOutput(t *testing.T) {
 	}
 }
 
-func TestLsCommandIsLongRunning(t *testing.T) {
+func TestLsCommand_IsLongRunning(t *testing.T) {
 	var s3 mockS3Client
 	var con context.Context
 

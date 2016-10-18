@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestUpdatePath(t *testing.T) {
+func TestContext_UpdatePath(t *testing.T) {
 	// Helper function to check the length of a path.
 	validatePathLength := func(p []string, l int) {
 		if len(p) != l {
@@ -45,7 +45,7 @@ func TestUpdatePath(t *testing.T) {
 	}
 }
 
-func TestCalculatePath(t *testing.T) {
+func TestContext_CalculatePath(t *testing.T) {
 	var c Context
 	var p []string
 
@@ -56,7 +56,7 @@ func TestCalculatePath(t *testing.T) {
 	}
 }
 
-func TestIsRoot(t *testing.T) {
+func TestContext_IsRoot(t *testing.T) {
 	var c Context
 
 	if !c.IsRoot() {
@@ -84,7 +84,7 @@ func TestIsRoot(t *testing.T) {
 	}
 }
 
-func TestPath(t *testing.T) {
+func TestContext_Path(t *testing.T) {
 	var c Context
 
 	if len(c.Path()) > 0 {
@@ -102,7 +102,7 @@ func TestPath(t *testing.T) {
 	}
 }
 
-func TestPathWithoutBucket(t *testing.T) {
+func TestContext_PathWithoutBucket(t *testing.T) {
 	var c Context
 
 	if len(c.PathWithoutBucket()) > 0 {
@@ -120,7 +120,7 @@ func TestPathWithoutBucket(t *testing.T) {
 	}
 }
 
-func TestBucket(t *testing.T) {
+func TestContext_Bucket(t *testing.T) {
 	var c Context
 
 	if len(c.Bucket()) > 0 {

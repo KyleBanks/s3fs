@@ -6,7 +6,7 @@ import (
 	"github.com/KyleBanks/s3fs/handler/command/context"
 )
 
-func TestPwdCommandExecute(t *testing.T) {
+func TestPwdCommand_Execute(t *testing.T) {
 	var pwd PwdCommand
 	var out mockOutputter
 	var con context.Context
@@ -45,7 +45,7 @@ func TestPwdCommandExecute(t *testing.T) {
 	validatePwd("bucket/folder/subfolder" + context.PathDelimiter + "\n")
 }
 
-func TestPwdCommandIsLongRunning(t *testing.T) {
+func TestPwdCommand_IsLongRunning(t *testing.T) {
 	pwd := NewPwd(&context.Context{})
 
 	if pwd.IsLongRunning() {

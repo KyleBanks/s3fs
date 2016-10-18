@@ -44,25 +44,25 @@ func (s S3Handler) Handle(cmd []string, out command.Outputter) error {
 }
 
 // commandFromArgs takes an arg slice and returns the appropriate command executor.
-func (s S3Handler) commandFromArgs(args []string) (e command.Executer, err error) {
+func (s S3Handler) commandFromArgs(args []string) (ex command.Executor, err error) {
 	switch args[0] {
 
 	case command.CmdLs:
-		e = command.NewLs(s.s3, s.con)
+		ex = command.NewLs(s.s3, s.con)
 	case command.CmdCd:
-		e = command.NewCd(s.s3, s.con, args[1:])
+		ex = command.NewCd(s.s3, s.con, args[1:])
 	case command.CmdPwd:
-		e = command.NewPwd(s.con)
+		ex = command.NewPwd(s.con)
 	case command.CmdClear:
-		e = command.NewClear()
+		ex = command.NewClear()
 	case command.CmdExit:
-		e = command.NewExit()
+		ex = command.NewExit()
 
 	default:
 		err = errors.New("Unknown Command: " + args[0])
 	}
 
-	return e, err
+	return ex, err
 }
 
 // NewS3 initializes and returns an S3Handler.

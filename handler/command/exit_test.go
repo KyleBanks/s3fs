@@ -6,7 +6,7 @@ import (
 
 // Note: Currently cannot test the exit Execute() function due to it's nature.
 
-func TestExitCommandIsLongRunning(t *testing.T) {
+func TestExitCommand_IsLongRunning(t *testing.T) {
 	e := NewExit()
 
 	if e.IsLongRunning() {

@@ -18,8 +18,8 @@ const (
 	CmdExit = "exit"
 )
 
-// Executer defines an interface for executable instructions.
-type Executer interface {
+// Executor defines an interface for executable instructions.
+type Executor interface {
 	// Execute runs the command.
 	Execute(Outputter) error
 

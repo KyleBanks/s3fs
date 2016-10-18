@@ -7,7 +7,7 @@ import (
 
 // Note: Cannot test ClearCommand Execute or it will clear the testing output
 
-// func TestClearCommandExecute(t *testing.T) {
+// func TestClearCommand_Execute(t *testing.T) {
 // 	var out mockOutputter
 
 // 	clr := NewClear()
@@ -16,7 +16,7 @@ import (
 // 	// Nothing panicked, can't test anything else.
 // }
 
-func TestClearCommandCmdForSys(t *testing.T) {
+func TestClearCommand_cmdForSys(t *testing.T) {
 	clr := NewClear()
 
 	// Windows
@@ -33,7 +33,7 @@ func TestClearCommandCmdForSys(t *testing.T) {
 	}
 }
 
-func TestClearCommandIsLongRunning(t *testing.T) {
+func TestClearCommand_IsLongRunning(t *testing.T) {
 	clr := NewClear()
 
 	if clr.IsLongRunning() {
