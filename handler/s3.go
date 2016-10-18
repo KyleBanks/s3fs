@@ -51,6 +51,8 @@ func (s S3Handler) commandFromArgs(args []string) (ex command.Executor, err erro
 		ex = command.NewLs(s.s3, s.con)
 	case command.CmdCd:
 		ex = command.NewCd(s.s3, s.con, args[1:])
+	case command.CmdGet:
+		ex = command.NewGet(s.s3, s.con, args[1:])
 	case command.CmdPwd:
 		ex = command.NewPwd(s.con)
 	case command.CmdClear:
