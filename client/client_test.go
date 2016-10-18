@@ -226,10 +226,10 @@ func TestClient_DownloadObject(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer os.Remove(f.Name())
+		defer os.Remove(f)
 
 		// Ensure the correct file contents were written.
-		contents, err := ioutil.ReadFile(f.Name())
+		contents, err := ioutil.ReadFile(f)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -260,7 +260,7 @@ func TestClient_DownloadObject(t *testing.T) {
 		c := Client{&mockS3}
 		if f, err := c.DownloadObject(bucket, key); err != mockErr {
 			t.Fatalf("Expected mock error to be returned: %v", err)
-		} else if f != nil {
+		} else if len(f) > 0 {
 			t.Fatalf("Unexpected file returned: %v", f)
 		}
 	}

@@ -90,11 +90,11 @@ func (c Client) ObjectExists(bucket, key string) (bool, error) {
 	return true, nil
 }
 
-// DownloadObject downloads the specified object from Amazon S3 and returns a local temporary file
+// DownloadObject downloads the specified object from Amazon S3 and returns the name of a local temporary file
 // containing the downloaded object.
 //
 // Note: It is the responsibility of the caller to clean up the temporary file as necessary.
-func (c Client) DownloadObject(bucket, key string) (*os.File, error) {
+func (c Client) DownloadObject(bucket, key string) (string, error) {
 	// Construct the request.
 	input := s3.GetObjectInput{
 		Bucket: &bucket,
@@ -104,23 +104,23 @@ func (c Client) DownloadObject(bucket, key string) (*os.File, error) {
 	// Perform the API request to get the object.
 	output, err := c.s3.GetObject(&input)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer output.Body.Close()
 
 	// Create the temporary file.
 	tmp, err := ioutil.TempFile(os.TempDir(), string(time.Now().UnixNano()))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer tmp.Close()
 
 	// Perform the write.
 	if _, err := io.Copy(tmp, output.Body); err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return tmp, nil
+	return tmp.Name(), nil
 }
 
 // New returns an initialized Client.
