@@ -5,7 +5,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -109,7 +108,7 @@ func (c Client) DownloadObject(bucket, key string) (string, error) {
 	defer output.Body.Close()
 
 	// Create the temporary file.
-	tmp, err := ioutil.TempFile(os.TempDir(), string(time.Now().UnixNano()))
+	tmp, err := ioutil.TempFile(os.TempDir(), "")
 	if err != nil {
 		return "", err
 	}
