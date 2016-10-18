@@ -11,4 +11,6 @@ type s3Communicator interface {
 
 	HeadBucket(*s3.HeadBucketInput) (*s3.HeadBucketOutput, error)
 	HeadObject(*s3.HeadObjectInput) (*s3.HeadObjectOutput, error)
+
+	GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error)
 }

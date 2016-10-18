@@ -1,6 +1,8 @@
 package client
 
 import (
+	"io"
+
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
@@ -12,6 +14,8 @@ type mockS3Communicator struct {
 
 	headBucketCallback func(i *s3.HeadBucketInput) (*s3.HeadBucketOutput, error)
 	headObjectCallback func(i *s3.HeadObjectInput) (*s3.HeadObjectOutput, error)
+
+	getObjectCallback func(i *s3.GetObjectInput) (*s3.GetObjectOutput, error)
 }
 
 func (m *mockS3Communicator) ListBuckets(i *s3.ListBucketsInput) (*s3.ListBucketsOutput, error) {
@@ -28,4 +32,33 @@ func (m *mockS3Communicator) HeadBucket(i *s3.HeadBucketInput) (*s3.HeadBucketOu
 
 func (m *mockS3Communicator) HeadObject(i *s3.HeadObjectInput) (*s3.HeadObjectOutput, error) {
 	return m.headObjectCallback(i)
+}
+
+func (m *mockS3Communicator) GetObject(i *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+	return m.getObjectCallback(i)
+}
+
+// Mock ReadCloser
+
+type mockReadCloser struct {
+	index int
+	data  []byte
+}
+
+func (m *mockReadCloser) Read(b []byte) (int, error) {
+	var i int
+	for i = 0; i < len(b); i++ {
+		if i+m.index >= len(m.data) {
+			return i, io.EOF
+		}
+
+		b[i] = m.data[i+m.index]
+	}
+
+	m.index += i
+	return i, nil
+}
+
+func (m *mockReadCloser) Close() error {
+	return nil
 }

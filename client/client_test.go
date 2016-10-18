@@ -2,6 +2,8 @@ package client
 
 import (
 	"errors"
+	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -99,10 +101,6 @@ func TestClient_LsObjects(t *testing.T) {
 
 		var mockS3 mockS3Communicator
 		mockS3.listObjectsCallback = func(i *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
-			if *i.Bucket != bucket || *i.Prefix != prefix {
-				t.Fatalf("Unexpected ListObjectsInput: %v", i)
-			}
-
 			return nil, mockErr
 		}
 
@@ -142,10 +140,6 @@ func TestClient_BucketExists(t *testing.T) {
 
 		var mockS3 mockS3Communicator
 		mockS3.headBucketCallback = func(i *s3.HeadBucketInput) (*s3.HeadBucketOutput, error) {
-			if *i.Bucket != bucket {
-				t.Fatalf("Unexpected HeadBucketInput: %v", i)
-			}
-
 			return nil, errors.New("Fake error")
 		}
 
@@ -188,10 +182,6 @@ func TestClient_ObjectExists(t *testing.T) {
 
 		var mockS3 mockS3Communicator
 		mockS3.headObjectCallback = func(i *s3.HeadObjectInput) (*s3.HeadObjectOutput, error) {
-			if *i.Bucket != bucket || *i.Key != key {
-				t.Fatalf("Unexpected HeadObjectInput: %v", i)
-			}
-
 			return nil, errors.New("Fake Error")
 		}
 
@@ -200,6 +190,78 @@ func TestClient_ObjectExists(t *testing.T) {
 			t.Fatal(err)
 		} else if exists {
 			t.Fatal("Exists should be false in negative case")
+		}
+	}
+}
+
+func TestClient_DownloadObject(t *testing.T) {
+	// Positive Case
+	{
+		bucket := "bucket"
+		key := "key"
+
+		// Create a mock file to download.
+		data := make([]byte, 10000)
+		for i := 0; i < len(data); i++ {
+			data[i] = byte(i)
+		}
+
+		// Override the getObjectCallback to return the mock file.
+		var mockS3 mockS3Communicator
+		mockS3.getObjectCallback = func(i *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+			if *i.Bucket != bucket || *i.Key != key {
+				t.Fatalf("Unexpected GetObjectInput: %v", i)
+			}
+
+			return &s3.GetObjectOutput{
+				Body: &mockReadCloser{
+					data: data,
+				},
+			}, nil
+		}
+
+		// Download the sample object.
+		c := Client{&mockS3}
+		f, err := c.DownloadObject(bucket, key)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer os.Remove(f.Name())
+
+		// Ensure the correct file contents were written.
+		contents, err := ioutil.ReadFile(f.Name())
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if len(contents) != len(data) {
+			t.Fatalf("Downloaded file length mismatch: {Expected: %v, Actual: %v}", len(data), len(contents))
+		}
+
+		for i := 0; i < len(contents); i++ {
+			if contents[i] != data[i] {
+				t.Fatal("Downloaded file contents incorrect!")
+			}
+		}
+	}
+
+	// S3 Error
+	{
+		bucket := "bucket"
+		key := "key"
+		mockErr := errors.New("Mock Error")
+
+		// Override the getObjectCallback to return the mock error.
+		var mockS3 mockS3Communicator
+		mockS3.getObjectCallback = func(i *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+			return nil, mockErr
+		}
+
+		c := Client{&mockS3}
+		if f, err := c.DownloadObject(bucket, key); err != mockErr {
+			t.Fatalf("Expected mock error to be returned: %v", err)
+		} else if f != nil {
+			t.Fatalf("Unexpected file returned: %v", f)
 		}
 	}
 }
