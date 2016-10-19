@@ -41,7 +41,7 @@ func TestLsCommand_Execute(t *testing.T) {
 		// Validate the actual output.
 		for i, sample := range samples {
 			if !strings.Contains(out.output[i], sample) {
-				t.Fatalf("Failed to find output: %v", sample)
+				t.Fatalf("Failed to find output [%v] in response: %v", sample, out.output)
 			}
 		}
 	}

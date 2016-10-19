@@ -11,7 +11,7 @@ const (
 	// loaderText is the text displayed when the loading indicator is enabled.
 	loaderText = "."
 	// promptText is the text displayed when ShowPrompt() is called.
-	promptText = "> "
+	promptText = "\n> "
 )
 
 // CommandLine provides UI indications to the command line.
@@ -38,21 +38,25 @@ func (c *CommandLine) ShowPrompt() {
 
 // startLoading initializes prints the loading indicator until the stop signal is received.
 func (c *CommandLine) startLoading() {
+	var didPrint bool
+
 	for {
+		// Sleep a while before and between each loading indicator print.
+		time.Sleep(loaderSleepTime)
+
 		select {
 
 		// Check if we need to stop loading.
 		case <-c.stopLoading:
-			// Always write a blank line after loading finishes.
-			c.out.Write("\n")
+			if didPrint {
+				c.out.Write("\n")
+			}
 			return
 
 		// Update the loader indicator as required.
 		default:
+			didPrint = true
 			c.out.Write(loaderText)
-
-			// Sleep a while before displaying the loading indicator again.
-			time.Sleep(loaderSleepTime)
 		}
 	}
 }

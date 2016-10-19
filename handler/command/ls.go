@@ -49,7 +49,7 @@ func (ls LsCommand) Execute(out Outputter) error {
 		return err
 	}
 
-	// Print the 'ls' results, grouping folders together.
+	// Group and filter the output.
 	cache := make(map[string]bool)
 	for _, f := range res {
 		// Remove the prefix if applicable.
@@ -68,10 +68,10 @@ func (ls LsCommand) Execute(out Outputter) error {
 			f = fmt.Sprintf("%v%v", strings.Split(f, context.PathDelimiter)[0], context.PathDelimiter)
 		}
 
-		// Check if we've already printed this key.
+		// Add this file/folder name to the output text if it's not already.
 		if _, ok := cache[f]; !ok {
-			out.Write("\n" + ls.prefixOutput(f, isBucketList))
 			cache[f] = true
+			out.Write("\n" + ls.prefixOutput(f, isBucketList))
 		}
 	}
 
