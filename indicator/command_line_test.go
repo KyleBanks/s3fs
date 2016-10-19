@@ -16,7 +16,7 @@ func TestCommandLineIndicator_ShowLoader(t *testing.T) {
 	time.Sleep(loaderSleepTime * 2)
 
 	if len(out.output) == 0 || out.output[0] != loaderText {
-		t.Fatal("Unexpected loader output: %v", out.output)
+		t.Fatalf("Unexpected loader output: %v", out.output)
 	}
 }
 

@@ -31,7 +31,7 @@ func TestS3Handler_Handle(t *testing.T) {
 		if err := s3.Handle([]string{"fake"}, nil); err == nil {
 			t.Fatal("Expected error for unknown command")
 		} else if !strings.Contains(err.Error(), "fake") {
-			t.Fatal("Expected error to contain the command name: %v", err.Error())
+			t.Fatalf("Expected error to contain the command name: %v", err.Error())
 		}
 
 		if ui.showLoaderCalled || ui.hideLoaderCalled {
@@ -124,7 +124,7 @@ func TestS3Handler_commandFromArgs(t *testing.T) {
 		if _, err := s3.commandFromArgs(unknown); err == nil {
 			t.Fatal("Expected an error for unknown commands.")
 		} else if !strings.Contains(err.Error(), unknown[0]) {
-			t.Fatal("Expected error to contain the command name: %v", err.Error())
+			t.Fatalf("Expected error to contain the command name: %v", err.Error())
 		}
 	}
 }

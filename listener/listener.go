@@ -6,7 +6,7 @@ type Listener interface {
 	Listen() (cmds []InputCommand, ok bool)
 }
 
-// InputCommand defines a command input recieved by the listener.
+// InputCommand defines a command input received by the listener.
 type InputCommand struct {
 	Args []string
 }

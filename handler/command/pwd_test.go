@@ -49,7 +49,7 @@ func TestPwdCommand_IsLongRunning(t *testing.T) {
 	pwd := NewPwd(&context.Context{})
 
 	if pwd.IsLongRunning() {
-		t.Fatalf("Expected pwd not to be long running: ", pwd.IsLongRunning())
+		t.Fatalf("Expected pwd not to be long running: %v", pwd.IsLongRunning())
 	}
 }
 
