@@ -28,7 +28,7 @@ Execute the `s3fs` command to launch the application, and then use the appropria
 s3fs
 ```
 
-### cd
+## cd
 
 Changes the current working directory.
 
@@ -45,7 +45,7 @@ $ cd bucket/folder/subfolder
 $ cd /
 ```
 
-### pwd
+## pwd
 
 Prints the current working directory.
 
@@ -57,7 +57,7 @@ $ pwd
 /bucket/folder
 ```
 
-### ls
+## ls
 
 Lists current directory contents.
 
@@ -84,7 +84,7 @@ $ ls
  file3.txt
 ```
 
-### Other Commands
+## Other Commands
 
 - `clear` clears all terminal output.
 - `exit` quits `s3fs`.
