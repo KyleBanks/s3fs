@@ -7,8 +7,8 @@ import (
 
 func TestCommandLineIndicator_ShowLoader(t *testing.T) {
 	var out mockStringWriter
-
 	ind := NewCommandLine(&out)
+
 	ind.ShowLoader()
 
 	// Allow time for the loading prompt to display at least once.
@@ -16,20 +16,38 @@ func TestCommandLineIndicator_ShowLoader(t *testing.T) {
 	time.Sleep(loaderSleepTime * 2)
 
 	if len(out.output) == 0 || out.output[0] != loaderText {
-		t.Fatal("Unexpected loader output: %v", out.output)
+		t.Fatalf("Unexpected loader output: %v", out.output)
 	}
 }
 
 func TestCommandLineIndicator_HideLoader(t *testing.T) {
-	var out mockStringWriter
+	// No loading time
+	{
+		var out mockStringWriter
+		ind := NewCommandLine(&out)
 
-	ind := NewCommandLine(&out)
+		ind.ShowLoader()
+		ind.HideLoader()
 
-	ind.ShowLoader()
-	ind.HideLoader()
+		if len(out.output) != 0 {
+			t.Fatal("Expected no output when loading is immediately stopped")
+		}
+	}
 
-	if len(out.output) == 0 || out.output[len(out.output)-1] != "\n" {
-		t.Fatal("Expected CommandLineIndicator to write a newline when stopped loading")
+	// Allow loading time.
+	{
+		var out mockStringWriter
+		ind := NewCommandLine(&out)
+
+		ind.ShowLoader()
+		// Allow time for the loading prompt to display at least once.
+		// Note: We may get more than one loading indicator displayed while sleeping, which is okay.
+		time.Sleep(loaderSleepTime * 2)
+		ind.HideLoader()
+
+		if len(out.output) == 0 || out.output[len(out.output)-1] != "\n" {
+			t.Fatal("Expected CommandLineIndicator to write a newline when stopped loading")
+		}
 	}
 }
 

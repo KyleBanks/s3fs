@@ -41,7 +41,7 @@ func TestLsCommand_Execute(t *testing.T) {
 		// Validate the actual output.
 		for i, sample := range samples {
 			if !strings.Contains(out.output[i], sample) {
-				t.Fatalf("Failed to find output: %v", sample)
+				t.Fatalf("Failed to find output [%v] in response: %v", sample, out.output)
 			}
 		}
 	}
@@ -66,7 +66,7 @@ func TestLsCommand_Execute(t *testing.T) {
 		// Execute the command and validate the error is bubbled up.
 		ls := NewLs(&s3, &con)
 		if err := ls.Execute(&out); err != mockErr {
-			t.Fatal("Expected error to be passed up the stack: %v", err)
+			t.Fatalf("Expected error to be passed up the stack: %v", err)
 		}
 
 		// Ensure no output was written.
@@ -158,7 +158,7 @@ func TestLsCommand_Execute(t *testing.T) {
 
 		ls := NewLs(&s3, &con)
 		if err := ls.Execute(&out); err != mockErr {
-			t.Fatal("Expected error to be passed up the stack: %v", err)
+			t.Fatalf("Expected error to be passed up the stack: %v", err)
 		}
 
 		if len(out.output) != 0 {

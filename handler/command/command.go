@@ -8,13 +8,16 @@ const (
 	// CmdCd changes directory.
 	CmdCd = "cd"
 
+	// CmdGet downloads an object.
+	CmdGet = "get"
+
 	// CmdPwd prints the present working directory.
 	CmdPwd = "pwd"
 
 	// CmdClear clears the current output.
 	CmdClear = "clear"
 
-	// CmdExit exit the program.
+	// CmdExit exits the program.
 	CmdExit = "exit"
 )
 
@@ -39,4 +42,6 @@ type S3Client interface {
 
 	BucketExists(string) (bool, error)
 	ObjectExists(string, string) (bool, error)
+
+	DownloadObject(string, string) (string, error)
 }

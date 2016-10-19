@@ -34,7 +34,7 @@ func main() {
 			continue
 		}
 
-		// For each command recieved, handle it.
+		// For each command received, handle it.
 		for _, cmd := range cmds {
 			if err := h.Handle(cmd.Args, out); err != nil {
 				out.Write(err.Error() + "\n")

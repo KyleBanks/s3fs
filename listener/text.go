@@ -5,10 +5,10 @@ import (
 )
 
 const (
-	// cmdDelimiter is used to seperate multiple commands in the same input.
+	// cmdDelimiter is used to separate multiple commands in the same input.
 	cmdDelimiter = "&&"
 
-	// argDelimiter is used to seperate arguments for a command.
+	// argDelimiter is used to separate arguments for a command.
 	argDelimiter = " "
 )
 

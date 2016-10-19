@@ -52,7 +52,7 @@ func TestClient_LsBuckets(t *testing.T) {
 		c := Client{&mockS3}
 
 		if _, err := c.LsBuckets(); err != mockErr {
-			t.Fatal("Unexpected error returned: %v", err)
+			t.Fatalf("Unexpected error returned: %v", err)
 		}
 	}
 }
@@ -107,7 +107,7 @@ func TestClient_LsObjects(t *testing.T) {
 		c := Client{&mockS3}
 
 		if _, err := c.LsObjects(bucket, prefix); err != mockErr {
-			t.Fatal("Unexpected error returned: %v", err)
+			t.Fatalf("Unexpected error returned: %v", err)
 		}
 	}
 }
