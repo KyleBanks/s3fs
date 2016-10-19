@@ -1,6 +1,6 @@
 # s3fs
 
-[![Build Status](https://travis-ci.org/KyleBanks/s3fs.svg?branch=master)](https://travis-ci.org/KyleBanks/s3fs) &nbsp; [![GoDoc](https://godoc.org/github.com/KyleBanks/s3fs?status.svg)](https://godoc.org/github.com/KyleBanks/s3fs)
+[![Build Status](https://travis-ci.org/KyleBanks/s3fs.svg?branch=master)](https://travis-ci.org/KyleBanks/s3fs) &nbsp; [![GoDoc](https://godoc.org/github.com/KyleBanks/s3fs?status.svg)](https://godoc.org/github.com/KyleBanks/s3fs) &nbsp; [![Go Report Card](https://goreportcard.com/badge/github.com/KyleBanks/s3fs)](https://goreportcard.com/report/github.com/KyleBanks/s3fs)
 
 `s3fs` is an [Amazon S3](https://aws.amazon.com/s3/) client that provides a familiar interface for navigating and managing S3 buckets and objects. The goal of `s3fs` is to allow you to interact with Amazon S3 as you would your local filesystem.
 
@@ -28,7 +28,7 @@ Execute the `s3fs` command to launch the application, and then use the appropria
 s3fs
 ```
 
-### cd
+## cd
 
 Changes the current working directory.
 
@@ -45,7 +45,7 @@ $ cd bucket/folder/subfolder
 $ cd /
 ```
 
-### pwd
+## pwd
 
 Prints the current working directory.
 
@@ -57,7 +57,7 @@ $ pwd
 /bucket/folder
 ```
 
-### ls
+## ls
 
 Lists current directory contents.
 
@@ -84,7 +84,7 @@ $ ls
  file3.txt
 ```
 
-### Other Commands
+## Other Commands
 
 - `clear` clears all terminal output.
 - `exit` quits `s3fs`.
@@ -97,26 +97,4 @@ Check the [issues page](https://github.com/KyleBanks/s3fs/issues) if you're inte
 
 # License
 
-```
-MIT License
-
-Copyright (c) 2016 Kyle Banks
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+**s3fs** is licensed under [Apache License 2.0](./LICENSE).
