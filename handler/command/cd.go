@@ -51,7 +51,7 @@ func (cd CdCommand) Execute(out Outputter) error {
 			key = key + context.PathDelimiter
 		}
 
-		ok, err = cd.s3.ObjectExists(targetPath[0], key)
+		ok, err = cd.s3.PathExists(targetPath[0], key)
 	}
 
 	// Ensure we can perform the command.

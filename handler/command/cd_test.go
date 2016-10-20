@@ -48,8 +48,6 @@ func TestCdCommand_Execute(t *testing.T) {
 		if err := cd.Execute(&out); err != nil {
 			t.Fatal(err)
 		}
-
-		s3.bucketExistsCallback = nil
 	}
 
 	// Invalid bucket
@@ -71,8 +69,6 @@ func TestCdCommand_Execute(t *testing.T) {
 		if err := cd.Execute(&out); err == nil {
 			t.Fatalf("Expected error to be returned for invalid bucket")
 		}
-
-		s3.bucketExistsCallback = nil
 	}
 
 	// Error checking bucket
@@ -95,8 +91,6 @@ func TestCdCommand_Execute(t *testing.T) {
 		if err := cd.Execute(&out); err != fakeErr {
 			t.Fatalf("Unexpected error returned for bucket cd")
 		}
-
-		s3.bucketExistsCallback = nil
 	}
 
 	// Valid folder
@@ -106,7 +100,7 @@ func TestCdCommand_Execute(t *testing.T) {
 		var out mockOutputter
 		args := []string{"bucket/folder/"}
 
-		s3.objectExistsCallback = func(b, k string) (bool, error) {
+		s3.pathExistsCallback = func(b, k string) (bool, error) {
 			if b != "bucket" || k != "folder/" {
 				t.Fatalf("Checking for unexpected bucket/folder: %v/%v", b, k)
 			}
@@ -118,8 +112,6 @@ func TestCdCommand_Execute(t *testing.T) {
 		if err := cd.Execute(&out); err != nil {
 			t.Fatal(err)
 		}
-
-		s3.objectExistsCallback = nil
 	}
 
 	// Invalid folder
@@ -129,7 +121,7 @@ func TestCdCommand_Execute(t *testing.T) {
 		var out mockOutputter
 		args := []string{"bucket/invalidfolder/"}
 
-		s3.objectExistsCallback = func(b, k string) (bool, error) {
+		s3.pathExistsCallback = func(b, k string) (bool, error) {
 			if b != "bucket" || k != "invalidfolder/" {
 				t.Fatalf("Checking for unexpected bucket/folder: %v/%v", b, k)
 			}
@@ -141,8 +133,6 @@ func TestCdCommand_Execute(t *testing.T) {
 		if err := cd.Execute(&out); err == nil {
 			t.Fatalf("Expected error to be returned for invalid folder")
 		}
-
-		s3.objectExistsCallback = nil
 	}
 
 	// Error checking bucket
@@ -153,7 +143,7 @@ func TestCdCommand_Execute(t *testing.T) {
 		args := []string{"bucket/folder"}
 		fakeErr := errors.New("Error checking object")
 
-		s3.objectExistsCallback = func(b, k string) (bool, error) {
+		s3.pathExistsCallback = func(b, k string) (bool, error) {
 			if b != "bucket" || k != "folder/" {
 				t.Fatalf("Checking for unexpected bucket/folder: %v/%v", b, k)
 			}
@@ -165,8 +155,6 @@ func TestCdCommand_Execute(t *testing.T) {
 		if err := cd.Execute(&out); err != fakeErr {
 			t.Fatalf("Unexpected error returned for folder cd")
 		}
-
-		s3.objectExistsCallback = nil
 	}
 }
 

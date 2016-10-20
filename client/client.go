@@ -35,7 +35,7 @@ func (c Client) LsBuckets() ([]string, error) {
 
 // LsObjects performs a request to retrieve all objects, and returns their keys.
 func (c Client) LsObjects(bucket, prefix string) ([]string, error) {
-	// Use the current context to initialize the S3 request.
+	// Initialize the S3 request.
 	input := s3.ListObjectsInput{
 		Bucket: &bucket,
 		Prefix: &prefix,
@@ -72,9 +72,9 @@ func (c Client) BucketExists(bucket string) (bool, error) {
 	return true, nil
 }
 
-// ObjectExists returns a bool indicating if the specified object exists in a given bucket.
+// ObjectExists returns a bool indicating if the specified object exists.
 func (c Client) ObjectExists(bucket, key string) (bool, error) {
-	// Perform a HEAD request to determine if the object exists.
+	// Perform a HEAD request to determine if the bucket exists.
 	input := s3.HeadObjectInput{
 		Bucket: &bucket,
 		Key:    &key,
@@ -87,6 +87,28 @@ func (c Client) ObjectExists(bucket, key string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+// PathExists returns a bool indicating if the specified path exists in a given bucket.
+func (c Client) PathExists(bucket, path string) (bool, error) {
+	// Note: Using a HEAD request (HeadObject) won't work because S3 has no real concept of folders.
+	// Since we simulate folders, we instead do a 'ListObjects' to validate that there are objects that start with
+	// the path.
+
+	// Initialize the S3 request.
+	input := s3.ListObjectsInput{
+		Bucket:  &bucket,
+		Prefix:  &path,
+		MaxKeys: aws.Int64(1),
+	}
+
+	// Get the object list from AWS.
+	resp, err := c.s3.ListObjects(&input)
+	if err != nil {
+		return false, err
+	}
+
+	return len(resp.Contents) > 0, nil
 }
 
 // DownloadObject downloads the specified object from Amazon S3 and returns the name of a local temporary file

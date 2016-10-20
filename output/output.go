@@ -6,19 +6,19 @@ import (
 	"io"
 )
 
-// Outputter writes output to it's underlying io.Writer.
-type Outputter struct {
+// Output writes output to it's underlying io.Writer.
+type Output struct {
 	w io.Writer
 }
 
 // Write prints a string to the underlying Writer.
-func (o Outputter) Write(out string) {
+func (o Output) Write(out string) {
 	fmt.Fprint(o.w, out)
 }
 
-// New intializes and returns an OutputWriter.
-func New(w io.Writer) Outputter {
-	return Outputter{
+// New intializes and returns an Output.
+func New(w io.Writer) Output {
+	return Output{
 		w: w,
 	}
 }

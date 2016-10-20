@@ -11,6 +11,7 @@ func (m *mockOutputter) Write(str string) {
 }
 
 // Mock S3Client
+// TODO: This is duplicated in handler_test.go, would be nice to find a way to share it.
 
 type mockS3Client struct {
 	lsBucketsCallback func() ([]string, error)
@@ -18,6 +19,7 @@ type mockS3Client struct {
 
 	bucketExistsCallback func(string) (bool, error)
 	objectExistsCallback func(string, string) (bool, error)
+	pathExistsCallback   func(string, string) (bool, error)
 
 	downloadObjectCallback func(string, string) (string, error)
 }
@@ -36,6 +38,10 @@ func (m mockS3Client) BucketExists(bucket string) (bool, error) {
 
 func (m mockS3Client) ObjectExists(bucket, key string) (bool, error) {
 	return m.objectExistsCallback(bucket, key)
+}
+
+func (m mockS3Client) PathExists(bucket, path string) (bool, error) {
+	return m.pathExistsCallback(bucket, path)
 }
 
 func (m mockS3Client) DownloadObject(bucket, key string) (string, error) {

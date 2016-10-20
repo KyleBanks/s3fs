@@ -194,6 +194,51 @@ func TestClient_ObjectExists(t *testing.T) {
 	}
 }
 
+func TestClient_PathExists(t *testing.T) {
+	// Positive case
+	{
+		bucket := "bucket"
+		key := "key"
+
+		var mockS3 mockS3Communicator
+		mockS3.listObjectsCallback = func(i *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
+			if *i.Bucket != bucket || *i.Prefix != key || *i.MaxKeys != int64(1) {
+				t.Fatalf("Unexpected ListObjectsInput: %v", i)
+			}
+
+			return &s3.ListObjectsOutput{
+				Contents: make([]*s3.Object, 1),
+			}, nil
+		}
+
+		c := Client{&mockS3}
+		if exists, err := c.PathExists(bucket, key); err != nil {
+			t.Fatal(err)
+		} else if !exists {
+			t.Fatal("Exists should be true in positive case")
+		}
+	}
+
+	// Negative case
+	{
+		bucket := "bucket"
+		key := "key"
+		mockErr := errors.New("Mock err")
+
+		var mockS3 mockS3Communicator
+		mockS3.listObjectsCallback = func(i *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
+			return nil, mockErr
+		}
+
+		c := Client{&mockS3}
+		if exists, err := c.PathExists(bucket, key); err != mockErr {
+			t.Fatalf("Unexpected error returned: %v", err)
+		} else if exists {
+			t.Fatal("Exists should be false in negative case")
+		}
+	}
+}
+
 func TestClient_DownloadObject(t *testing.T) {
 	// Positive Case
 	{

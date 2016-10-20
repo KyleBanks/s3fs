@@ -42,6 +42,7 @@ type S3Client interface {
 
 	BucketExists(string) (bool, error)
 	ObjectExists(string, string) (bool, error)
+	PathExists(string, string) (bool, error)
 
 	DownloadObject(string, string) (string, error)
 }
