@@ -1,5 +1,9 @@
 package command
 
+import (
+	"os"
+)
+
 // Mock Outputter
 
 type mockOutputter struct {
@@ -22,6 +26,7 @@ type mockS3Client struct {
 	pathExistsCallback   func(string, string) (bool, error)
 
 	downloadObjectCallback func(string, string) (string, error)
+	uploadObjectCallback   func(string, string, *os.File) (string, error)
 }
 
 func (m mockS3Client) LsBuckets() ([]string, error) {
@@ -46,4 +51,8 @@ func (m mockS3Client) PathExists(bucket, path string) (bool, error) {
 
 func (m mockS3Client) DownloadObject(bucket, key string) (string, error) {
 	return m.downloadObjectCallback(bucket, key)
+}
+
+func (m mockS3Client) UploadObject(bucket, key string, file *os.File) (string, error) {
+	return m.uploadObjectCallback(bucket, key, file)
 }

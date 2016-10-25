@@ -95,6 +95,7 @@ func TestS3Handler_commandFromArgs(t *testing.T) {
 			{command.CmdLs, command.LsCommand{}},
 			{command.CmdCd, command.CdCommand{}},
 			{command.CmdGet, command.GetCommand{}},
+			{command.CmdPut, command.PutCommand{}},
 			{command.CmdPwd, command.PwdCommand{}},
 			{command.CmdClear, command.ClearCommand{}},
 			{command.CmdExit, command.ExitCommand{}},

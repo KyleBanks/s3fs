@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -307,6 +308,95 @@ func TestClient_DownloadObject(t *testing.T) {
 			t.Fatalf("Expected mock error to be returned: %v", err)
 		} else if len(f) > 0 {
 			t.Fatalf("Unexpected file returned: %v", f)
+		}
+	}
+}
+
+func TestClient_UploadObject(t *testing.T) {
+	// Positive case, not directory
+	{
+		file, _ := ioutil.TempFile("", "")
+		defer os.Remove(file.Name())
+		bucket := "bucket"
+		key := "folder/file.txt"
+
+		var mockS3 mockS3Communicator
+		mockS3.putObjectCallback = func(i *s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+			if *i.Bucket != bucket || *i.Key != key {
+				t.Fatalf("Unexpected PutObjectInput: %v", i)
+			}
+
+			return nil, nil
+		}
+		mockS3.listObjectsCallback = func(i *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
+			if *i.Bucket != bucket || *i.Prefix != key+"/" {
+				t.Fatalf("Unexpected ListObjectsOutput: %v", i)
+			}
+
+			return &s3.ListObjectsOutput{
+				Contents: make([]*s3.Object, 0),
+			}, nil
+		}
+
+		c := Client{&mockS3}
+		if path, err := c.UploadObject(bucket, key, file); err != nil {
+			t.Fatal(err)
+		} else if path != key {
+			t.Fatalf("Unexpected path returned: %v", path)
+		}
+	}
+
+	// Positive case, directory
+	{
+		file, _ := ioutil.TempFile("", "")
+		defer os.Remove(file.Name())
+		bucket := "bucket"
+		key := "folder"
+		expectedKey := key + "/" + filepath.Base(file.Name())
+
+		var mockS3 mockS3Communicator
+		mockS3.putObjectCallback = func(i *s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+			if *i.Bucket != bucket || *i.Key != expectedKey {
+				t.Fatalf("Unexpected PutObjectInput: %v", i)
+			}
+
+			return nil, nil
+		}
+		mockS3.listObjectsCallback = func(i *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
+			return &s3.ListObjectsOutput{
+				Contents: make([]*s3.Object, 1),
+			}, nil
+		}
+
+		c := Client{&mockS3}
+		if path, err := c.UploadObject(bucket, key, file); err != nil {
+			t.Fatal(err)
+		} else if path != expectedKey {
+			t.Fatalf("Unexpected path returned: %v", path)
+		}
+	}
+
+	// Negative case
+	{
+		file, _ := ioutil.TempFile("", "")
+		defer os.Remove(file.Name())
+		bucket := "bucket"
+		key := "folder"
+		mockErr := errors.New("Mock error")
+
+		var mockS3 mockS3Communicator
+		mockS3.putObjectCallback = func(i *s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+			return nil, mockErr
+		}
+		mockS3.listObjectsCallback = func(i *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
+			return &s3.ListObjectsOutput{
+				Contents: make([]*s3.Object, 0),
+			}, nil
+		}
+
+		c := Client{&mockS3}
+		if _, err := c.UploadObject(bucket, key, file); err != mockErr {
+			t.Fatalf("Expected mock error to be returned: %v", err)
 		}
 	}
 }

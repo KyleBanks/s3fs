@@ -13,4 +13,5 @@ type s3Communicator interface {
 	HeadObject(*s3.HeadObjectInput) (*s3.HeadObjectOutput, error)
 
 	GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error)
+	PutObject(*s3.PutObjectInput) (*s3.PutObjectOutput, error)
 }

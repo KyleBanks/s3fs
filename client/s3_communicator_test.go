@@ -16,6 +16,7 @@ type mockS3Communicator struct {
 	headObjectCallback func(i *s3.HeadObjectInput) (*s3.HeadObjectOutput, error)
 
 	getObjectCallback func(i *s3.GetObjectInput) (*s3.GetObjectOutput, error)
+	putObjectCallback func(i *s3.PutObjectInput) (*s3.PutObjectOutput, error)
 }
 
 func (m *mockS3Communicator) ListBuckets(i *s3.ListBucketsInput) (*s3.ListBucketsOutput, error) {
@@ -36,6 +37,10 @@ func (m *mockS3Communicator) HeadObject(i *s3.HeadObjectInput) (*s3.HeadObjectOu
 
 func (m *mockS3Communicator) GetObject(i *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
 	return m.getObjectCallback(i)
+}
+
+func (m *mockS3Communicator) PutObject(i *s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+	return m.putObjectCallback(i)
 }
 
 // Mock ReadCloser

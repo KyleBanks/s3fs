@@ -12,11 +12,11 @@ import (
 )
 
 const (
-	// argsIndexTarget indicates the expected argument index for the target file to get.
-	argsIndexTarget = 0
+	// getArgsIndexTarget indicates the expected argument index for the target file to get.
+	getArgsIndexTarget = 0
 
-	// argsIndexDestination indicates the expected argument index for the destination file location.
-	argsIndexDestination = 1
+	// getArgsIndexDestination indicates the expected argument index for the destination file location.
+	getArgsIndexDestination = 1
 )
 
 // GetCommand downloads a remote file.
@@ -30,10 +30,10 @@ type GetCommand struct {
 // Execute performs a 'get' by downloading a remote file to a local destination.
 func (get GetCommand) Execute(out Outputter) error {
 	// Get the target to download from the input arguments.
-	if len(get.args) < argsIndexTarget+1 {
+	if len(get.args) < getArgsIndexTarget+1 {
 		return errors.New("Missing target file.")
 	}
-	target := get.args[argsIndexTarget]
+	target := get.args[getArgsIndexTarget]
 
 	// Calculate the S3 object path.
 	path := get.con.CalculatePath(target)
@@ -68,8 +68,8 @@ func (get GetCommand) Execute(out Outputter) error {
 func (get GetCommand) absDestination(defaultName string) (string, error) {
 	// Use the default name if the destination argument was not provided.
 	dst := defaultName
-	if len(get.args) >= argsIndexDestination+1 && len(get.args[argsIndexDestination]) > 0 {
-		dst = get.args[argsIndexDestination]
+	if len(get.args) >= getArgsIndexDestination+1 && len(get.args[getArgsIndexDestination]) > 0 {
+		dst = get.args[getArgsIndexDestination]
 	}
 
 	// Convert to the absolute path.

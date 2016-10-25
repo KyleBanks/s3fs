@@ -1,6 +1,10 @@
 // Package command provides the ability to execute commands.
 package command
 
+import (
+	"os"
+)
+
 const (
 	// CmdLs lists directory contents based on the current context.
 	CmdLs = "ls"
@@ -10,6 +14,9 @@ const (
 
 	// CmdGet downloads an object.
 	CmdGet = "get"
+
+	// CmdPut uploads an object.
+	CmdPut = "put"
 
 	// CmdPwd prints the present working directory.
 	CmdPwd = "pwd"
@@ -45,4 +52,5 @@ type S3Client interface {
 	PathExists(string, string) (bool, error)
 
 	DownloadObject(string, string) (string, error)
+	UploadObject(string, string, *os.File) (string, error)
 }

@@ -84,6 +84,34 @@ $ ls
  file3.txt
 ```
 
+## get
+
+Downloads a remote Amazon S3 object to the local filesystem.
+
+**Examples:**
+
+```
+# Download to the current directory
+$ get bucket/folder/file.txt
+
+# Download to a specific location
+$ get file.txt ~/Desktop/
+```
+
+## put
+
+Uploads a local file to Amazon S3.
+
+**Examples:**
+
+```
+# Upload to the pwd
+$ put file.txt
+
+# Upload to a specific location
+$ put file.txt bucket/folder
+```
+
 ## Other Commands
 
 - `clear` clears all terminal output.

@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -142,6 +143,41 @@ func (c Client) DownloadObject(bucket, key string) (string, error) {
 	}
 
 	return tmp.Name(), nil
+}
+
+// UploadObject uploads a file to the specified key in an Amazon S3 bucket.
+//
+// Note: If the key provided is a directory, the file will be stored in the directory with the
+// same name as the original file. If the key exists, it will be overwritten.
+func (c Client) UploadObject(bucket, key string, file *os.File) (string, error) {
+	// Sanitize the key input if it's empty or is a directory.
+	if len(key) == 0 {
+		key = filepath.Base(file.Name())
+	} else {
+		// Determine if the key is a directory, and if so, append the file name.
+		path := key
+		if path != "/" {
+			path = path + "/"
+		}
+
+		if isDir, err := c.PathExists(bucket, path); err != nil {
+			return "", err
+		} else if isDir {
+			key = path + filepath.Base(file.Name())
+		}
+	}
+
+	// Perform the upload.
+	input := s3.PutObjectInput{
+		Bucket: &bucket,
+		Key:    &key,
+		Body:   file,
+	}
+	if _, err := c.s3.PutObject(&input); err != nil {
+		return "", err
+	}
+
+	return key, nil
 }
 
 // New returns an initialized Client.
