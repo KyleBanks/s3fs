@@ -1,6 +1,9 @@
 # s3fs
 
-[![Build Status](https://travis-ci.org/KyleBanks/s3fs.svg?branch=master)](https://travis-ci.org/KyleBanks/s3fs) &nbsp; [![GoDoc](https://godoc.org/github.com/KyleBanks/s3fs?status.svg)](https://godoc.org/github.com/KyleBanks/s3fs) &nbsp; [![Go Report Card](https://goreportcard.com/badge/github.com/KyleBanks/s3fs)](https://goreportcard.com/report/github.com/KyleBanks/s3fs)
+[![Build Status](https://travis-ci.org/KyleBanks/s3fs.svg?branch=master)](https://travis-ci.org/KyleBanks/s3fs) &nbsp; 
+[![GoDoc](https://godoc.org/github.com/KyleBanks/s3fs?status.svg)](https://godoc.org/github.com/KyleBanks/s3fs) &nbsp; 
+[![Go Report Card](https://goreportcard.com/badge/github.com/KyleBanks/s3fs)](https://goreportcard.com/report/github.com/KyleBanks/s3fs)&nbsp;
+[![Coverage Status](https://coveralls.io/repos/github/KyleBanks/s3fs/badge.svg?branch=master)](https://coveralls.io/github/KyleBanks/s3fs?branch=master)
 
 `s3fs` is an [Amazon S3](https://aws.amazon.com/s3/) client that provides a familiar interface for navigating and managing S3 buckets and objects. The goal of `s3fs` is to allow you to interact with Amazon S3 as you would your local filesystem.
 
